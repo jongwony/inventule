@@ -31,6 +31,10 @@ import {
   SelectSearch,
 } from './component/Search';
 
+import {
+    MainHeader,
+} from './component/MainHeader';
+
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
@@ -70,7 +74,7 @@ const App: () => Node = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        <MainHeader />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,

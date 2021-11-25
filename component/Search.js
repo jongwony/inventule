@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 
+const axios = require('axios');
 
 const ConditionCount = (props): Node => {
     if (props.count > 5) {
@@ -28,12 +29,33 @@ const ConditionCount = (props): Node => {
 
 };
 
+
+const FetchTestAPI = (): Node => {
+    const [text, onFetch] = React.useState(null);
+
+    const getInstaAPI = async () => {
+        await axios({
+            method: 'get',
+            url: 'https://9e240d7v0k.execute-api.ap-northeast-2.amazonaws.com/api/instagram',
+        }).then(function (response) {
+            onFetch(response.data)
+        });
+    }
+    React.useEffect(() => {
+        getInstaAPI();
+    }, []);
+
+    return (
+        <Text>{JSON.stringify(text)}</Text>
+    )
+};
+
 const SearchSubmit = (props): Node => {
     return (
         <Button
             title="🔍"
             style={styles.button}
-            onPress={() => Alert.alert('Simple Button pressed\n'+ props.text)}
+            onPress={() => Alert.alert('Simple Button pressed\n' + props.text)}
         />
     )
 }
@@ -75,6 +97,9 @@ const SelectSearch = (): Node => {
                 >
                     <Text>Press Here</Text>
                 </TouchableOpacity>
+            </View>
+            <View>
+                <FetchTestAPI/>
             </View>
         </View>
     );
