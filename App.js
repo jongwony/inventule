@@ -22,9 +22,6 @@ import {
 import {
   Colors,
   DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
 import {
@@ -34,6 +31,10 @@ import {
 import {
     MainHeader,
 } from './component/MainHeader';
+
+import {
+    Donut,
+} from './component/ShelfLife'
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -79,6 +80,36 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+            <View
+                style={{
+                    flexDirection: "row",
+                }}
+            >
+                <Donut
+                    percentage='75'
+                    radius='40'
+                    strokeWidth='20'
+                    color='white'
+                />
+                <Donut
+                    percentage='45'
+                    radius='60'
+                    strokeWidth='10'
+                    color='orange'
+                />
+                <Donut
+                    percentage='90'
+                    radius='20'
+                    strokeWidth='5'
+                    color='cyan'
+                />
+                <Donut
+                    percentage='30'
+                    radius='15'
+                    strokeWidth='10'
+                    color='gray'
+                />
+            </View>
           <SelectSearch />
         </View>
       </ScrollView>
