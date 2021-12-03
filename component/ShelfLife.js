@@ -10,12 +10,34 @@ const Donut = (props): Node => {
     const radius = Number.parseInt(props.radius);
     const strokeWidth = Number.parseInt(props.strokeWidth);
     const percentage = Number.parseInt(props.percentage);
+    const duration = Number.parseInt(props.duration || 500);
+    const max = Number.parseInt(props.max || 100);
+    const delay = Number.parseInt(props.delay || 50);
     const halfCircle = radius + strokeWidth;
     const circleCircumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circleCircumference - (circleCircumference * percentage) / 100;
-    console.log(halfCircle)
-    console.log(circleCircumference)
-    console.log(strokeDashoffset)
+
+    const animatedValue = React.useRef(new Animated.Value(0)).current
+    const animation = (toValue) => {
+        return Animated.timing(animatedValue, {
+            toValue, duration, delay, useNativeDriver: true,
+        }).start(() => {
+            animation(toValue === 0 ? percentage : 0);
+        });
+    }
+    const circleRef = React.useRef();
+    React.useEffect(() => {
+        animation(percentage);
+
+        animatedValue.addListener(v => {
+            if (circleRef?.current) {
+                const maxPerc = 100 * v.value / max;
+                const strokeDashoffset = circleCircumference - (circleCircumference * maxPerc) / 100;
+                circleRef.current.setNativeProps({
+                    strokeDashoffset
+                });
+            }
+        })
+    })
 
     return (
         <View>
@@ -33,8 +55,9 @@ const Donut = (props): Node => {
                       r={radius}
                       fill='transparent'
                       opacity={0.2}
-                  ></Circle>
-                 <Circle
+                  />
+                 <AnimatedCircle
+                     ref={circleRef}
                      cx='50%'
                      cy='50%'
                      stroke={props.color}
@@ -42,9 +65,9 @@ const Donut = (props): Node => {
                      r={radius}
                      fill='transparent'
                      strokeDasharray={circleCircumference}
-                     strokeDashoffset={strokeDashoffset}
+                     strokeDashoffset={animatedValue}
                      strokeLinecap='round'
-                 ></Circle>
+                 />
               </G>
            </Svg>
         </View>
